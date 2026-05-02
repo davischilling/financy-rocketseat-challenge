@@ -8,7 +8,7 @@ import {
   UseMiddleware,
 } from 'type-graphql'
 import { Service, Inject } from 'typedi'
-import { CategoryModel, TransactionModel } from '@/domain/models/index.js'
+import { CategoryModel, StatsModel, TransactionModel } from '@/domain/models/index.js'
 import {
   CreateTransactionInput,
   UpdateTransactionInput,
@@ -63,6 +63,11 @@ export class TransactionResolver {
     @GqlUser() user: User
   ): Promise<TransactionModel> {
     return this.transactionService.deleteTransaction(id, user.id)
+  }
+
+  @Query(() => StatsModel)
+  async stats(@GqlUser() user: User): Promise<StatsModel> {
+    return this.transactionService.getStats(user.id)
   }
 
   @FieldResolver(() => CategoryModel, { nullable: true })

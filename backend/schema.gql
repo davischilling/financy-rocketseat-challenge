@@ -61,6 +61,7 @@ type Query {
   findTransaction(id: String!): TransactionModel!
   listCategories: [CategoryModel!]!
   listTransactions: [TransactionModel!]!
+  stats: StatsModel!
 }
 
 input RefreshTokenInput {
@@ -83,6 +84,15 @@ type RegisterResponse {
   refreshToken: String!
   token: String!
   user: UserModel!
+}
+
+type StatsModel {
+  monthlyExpense: Float!
+  monthlyIncome: Float!
+  mostUsedCategory: CategoryModel
+  totalBalance: Float!
+  totalCategoriesCount: Int!
+  totalTransactionsCount: Int!
 }
 
 type TransactionModel {
