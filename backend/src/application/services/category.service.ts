@@ -11,6 +11,9 @@ export class CategoryService {
     return prismaClient.category.create({
       data: {
         name: data.name,
+        description: data.description ?? null,
+        icon: data.icon ?? null,
+        color: data.color ?? null,
         userId,
       },
     })
@@ -47,7 +50,12 @@ export class CategoryService {
 
     return prismaClient.category.update({
       where: { id },
-      data: { name: data.name },
+      data: {
+        name: data.name,
+        ...(data.description !== undefined && { description: data.description }),
+        ...(data.icon !== undefined && { icon: data.icon }),
+        ...(data.color !== undefined && { color: data.color }),
+      },
     })
   }
 

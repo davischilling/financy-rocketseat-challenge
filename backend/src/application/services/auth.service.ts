@@ -1,5 +1,5 @@
 import { Service } from 'typedi'
-import type { User } from '@prisma/client'
+import type { User } from '../../../generated/prisma'
 import { prismaClient } from '../../infra/prisma/prisma.js'
 import type { RegisterInput } from '@/domain/dtos/index.js'
 import { comparePassword, hashPassword } from '../../shared/utils/hash.js'

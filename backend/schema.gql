@@ -4,7 +4,10 @@
 # -----------------------------------------------
 
 type CategoryModel {
+  color: String
   createdAt: DateTimeISO!
+  description: String
+  icon: String
   id: ID!
   name: String!
   updatedAt: DateTimeISO!
@@ -12,6 +15,9 @@ type CategoryModel {
 }
 
 input CreateCategoryInput {
+  color: String = null
+  description: String = null
+  icon: String = null
   name: String!
 }
 
@@ -81,6 +87,9 @@ type TransactionModel {
 }
 
 input UpdateCategoryInput {
+  color: String = null
+  description: String = null
+  icon: String = null
   name: String!
 }
 

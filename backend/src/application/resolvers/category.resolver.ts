@@ -14,7 +14,7 @@ import {
 import { CategoryService } from '../services/category.service.js'
 import { isAuth } from '../middlewares/auth.middleware.js'
 import { GqlUser } from '@/shared/decorators/user.decorator.js'
-import type { User } from '@prisma/client'
+import type { User } from '../../../generated/prisma'
 
 @Service()
 @Resolver(() => CategoryModel)
