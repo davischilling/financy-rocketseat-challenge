@@ -5,15 +5,9 @@ import type {
   UpdateTransactionInput,
 } from '@/domain/dtos/index.js'
 
-const VALID_TYPES = ['INCOME', 'EXPENSE']
-
 @Service()
 export class TransactionService {
   async createTransaction(data: CreateTransactionInput, userId: string) {
-    if (!VALID_TYPES.includes(data.type)) {
-      throw new Error('Transaction type must be INCOME or EXPENSE')
-    }
-
     if (data.categoryId) {
       const category = await prismaClient.category.findFirst({
         where: { id: data.categoryId, userId },
@@ -61,10 +55,6 @@ export class TransactionService {
     })
     if (!transaction) {
       throw new Error('Transaction not found')
-    }
-
-    if (data.type != null && !VALID_TYPES.includes(data.type)) {
-      throw new Error('Transaction type must be INCOME or EXPENSE')
     }
 
     if (data.categoryId != null) {

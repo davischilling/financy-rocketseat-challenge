@@ -3,6 +3,8 @@ import { Service, Inject } from 'typedi'
 import {
   LoginInput,
   LoginResponse,
+  RefreshTokenInput,
+  RefreshTokenResponse,
   RegisterInput,
   RegisterResponse,
 } from '@/domain/dtos/index.js'
@@ -30,6 +32,16 @@ export class AuthResolver {
     @Arg('data', () => RegisterInput) data: RegisterInput
   ): Promise<RegisterResponse> {
     const { token, refreshToken, user } = await this.authService.register(data)
+    return { token, refreshToken, user }
+  }
+
+  @Mutation(() => RefreshTokenResponse)
+  async refreshToken(
+    @Arg('data', () => RefreshTokenInput) data: RefreshTokenInput
+  ): Promise<RefreshTokenResponse> {
+    const { token, refreshToken, user } = await this.authService.refreshToken(
+      data.refreshToken
+    )
     return { token, refreshToken, user }
   }
 }

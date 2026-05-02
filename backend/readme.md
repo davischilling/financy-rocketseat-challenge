@@ -14,10 +14,10 @@ Nesse projeto back-end, será desenvolvido uma API para gerenciar a organizaçã
 - Deve ser possível deletar uma transação
 - Deve ser possível editar uma transação
 - Deve ser possível listar todas as transações
-- Deve ser possível criar uma categoria
-- Deve ser possível deletar uma categoria
-- Deve ser possível editar uma categoria
-- Deve ser possível listar todas as categorias
+- [X] Deve ser possível criar uma categoria
+- [X] Deve ser possível deletar uma categoria
+- [X] Deve ser possível editar uma categoria
+- [X] Deve ser possível listar todas as categorias
 
 ⚠️ Para esse desafio é esperado que você utilize o banco de dados SQLite. Caso prefira pode usar o Postgres como opção.
 

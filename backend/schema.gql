@@ -24,7 +24,7 @@ input CreateCategoryInput {
 input CreateTransactionInput {
   categoryId: String = null
   title: String!
-  type: String!
+  type: TransactionType!
   value: Float!
 }
 
@@ -50,6 +50,7 @@ type Mutation {
   deleteCategory(id: String!): CategoryModel!
   deleteTransaction(id: String!): TransactionModel!
   login(data: LoginInput!): LoginResponse!
+  refreshToken(data: RefreshTokenInput!): RefreshTokenResponse!
   register(data: RegisterInput!): RegisterResponse!
   updateCategory(data: UpdateCategoryInput!, id: String!): CategoryModel!
   updateTransaction(data: UpdateTransactionInput!, id: String!): TransactionModel!
@@ -60,6 +61,16 @@ type Query {
   findTransaction(id: String!): TransactionModel!
   listCategories: [CategoryModel!]!
   listTransactions: [TransactionModel!]!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+type RefreshTokenResponse {
+  refreshToken: String!
+  token: String!
+  user: UserModel!
 }
 
 input RegisterInput {
@@ -80,10 +91,15 @@ type TransactionModel {
   createdAt: DateTimeISO!
   id: ID!
   title: String!
-  type: String!
+  type: TransactionType!
   updatedAt: DateTimeISO!
   userId: String!
   value: Float!
+}
+
+enum TransactionType {
+  EXPENSE
+  INCOME
 }
 
 input UpdateCategoryInput {
@@ -96,7 +112,7 @@ input UpdateCategoryInput {
 input UpdateTransactionInput {
   categoryId: String = null
   title: String = null
-  type: String = null
+  type: TransactionType = null
   value: Float = null
 }
 

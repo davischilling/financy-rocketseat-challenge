@@ -1,4 +1,5 @@
 import { Field, Float, GraphQLISODateTime, ID, ObjectType } from 'type-graphql'
+import { TransactionType } from '@/domain/dtos/index.js'
 import { CategoryModel } from './category.model.js'
 
 @ObjectType()
@@ -12,8 +13,8 @@ export class TransactionModel {
   @Field(() => Float)
   value!: number
 
-  @Field(() => String)
-  type!: string
+  @Field(() => TransactionType)
+  type!: TransactionType
 
   @Field(() => String, { nullable: true })
   categoryId?: string | null

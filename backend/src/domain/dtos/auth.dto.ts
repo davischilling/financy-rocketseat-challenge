@@ -51,6 +51,34 @@ export class LoginInput {
   password: string
 }
 
+@InputType()
+export class RefreshTokenInput {
+  constructor(refreshToken: string) {
+    this.refreshToken = refreshToken
+  }
+
+  @Field(() => String)
+  refreshToken: string
+}
+
+@ObjectType()
+export class RefreshTokenResponse {
+  constructor(token: string, refreshToken: string, user: UserModel) {
+    this.token = token
+    this.refreshToken = refreshToken
+    this.user = user
+  }
+
+  @Field(() => String)
+  token: string
+
+  @Field(() => String)
+  refreshToken: string
+
+  @Field(() => UserModel)
+  user: UserModel
+}
+
 @ObjectType()
 export class LoginResponse {
   constructor(token: string, refreshToken: string, user: UserModel) {

@@ -1,11 +1,20 @@
-import { Field, Float, InputType } from 'type-graphql'
+import { Field, Float, InputType, registerEnumType } from 'type-graphql'
+
+export const TransactionType = {
+  INCOME: 'INCOME',
+  EXPENSE: 'EXPENSE',
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+registerEnumType(TransactionType, { name: 'TransactionType' })
 
 @InputType()
 export class CreateTransactionInput {
   constructor(
     title: string,
     value: number,
-    type: string,
+    type: TransactionType,
     categoryId?: string | null
   ) {
     this.title = title
@@ -20,8 +29,8 @@ export class CreateTransactionInput {
   @Field(() => Float)
   value: number
 
-  @Field(() => String)
-  type: string
+  @Field(() => TransactionType)
+  type: TransactionType
 
   @Field(() => String, { nullable: true })
   categoryId?: string | null
@@ -32,7 +41,7 @@ export class UpdateTransactionInput {
   constructor(
     title?: string | null,
     value?: number | null,
-    type?: string | null,
+    type?: TransactionType | null,
     categoryId?: string | null
   ) {
     this.title = title ?? null
@@ -47,9 +56,10 @@ export class UpdateTransactionInput {
   @Field(() => Float, { nullable: true })
   value?: number | null
 
-  @Field(() => String, { nullable: true })
-  type?: string | null
+  @Field(() => TransactionType, { nullable: true })
+  type?: TransactionType | null
 
   @Field(() => String, { nullable: true })
   categoryId?: string | null
 }
+
