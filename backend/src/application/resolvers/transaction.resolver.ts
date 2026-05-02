@@ -8,7 +8,7 @@ import {
   UseMiddleware,
 } from 'type-graphql'
 import { Service, Inject } from 'typedi'
-import { CategoryModel, TransactionModel } from '../../domain/models/index.js'
+import { CategoryModel, TransactionModel } from '@/domain/models/index.js'
 import {
   CreateTransactionInput,
   UpdateTransactionInput,
@@ -16,7 +16,7 @@ import {
 import { TransactionService } from '../services/transaction.service.js'
 import { isAuth } from '../middlewares/auth.middleware.js'
 import { GqlUser } from '@/shared/decorators/user.decorator.js'
-import type { User } from '../../../generated/prisma'
+import { User } from '@prisma/client'
 
 @Service()
 @Resolver(() => TransactionModel)

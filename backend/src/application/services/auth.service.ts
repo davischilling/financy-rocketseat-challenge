@@ -1,9 +1,9 @@
 import { Service } from 'typedi'
-import type { User } from '../../../generated/prisma'
-import { prismaClient } from '../../infra/prisma/prisma.js'
+import { prismaClient } from '@/infra/prisma/prisma.js'
 import type { RegisterInput } from '@/domain/dtos/index.js'
-import { comparePassword, hashPassword } from '../../shared/utils/hash.js'
-import { signJwt } from '../../shared/utils/jwt.js'
+import { comparePassword, hashPassword } from '@/shared/utils/hash.js'
+import { signJwt } from '@/shared/utils/jwt.js'
+import { User } from '@prisma/client'
 
 @Service()
 export class AuthService {

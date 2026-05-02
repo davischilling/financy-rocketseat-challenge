@@ -1,5 +1,5 @@
 import { Service } from 'typedi'
-import { prismaClient } from '../../infra/prisma/prisma.js'
+import { prismaClient } from '@/infra/prisma/prisma.js'
 import type {
   CreateTransactionInput,
   UpdateTransactionInput,

@@ -6,7 +6,7 @@ import {
   UseMiddleware,
 } from 'type-graphql'
 import { Service, Inject } from 'typedi'
-import { CategoryModel } from '../../domain/models/index.js'
+import { CategoryModel } from '@/domain/models/index.js'
 import {
   CreateCategoryInput,
   UpdateCategoryInput,
@@ -14,7 +14,7 @@ import {
 import { CategoryService } from '../services/category.service.js'
 import { isAuth } from '../middlewares/auth.middleware.js'
 import { GqlUser } from '@/shared/decorators/user.decorator.js'
-import type { User } from '../../../generated/prisma'
+import { User } from '@prisma/client'
 
 @Service()
 @Resolver(() => CategoryModel)
