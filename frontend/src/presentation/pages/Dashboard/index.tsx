@@ -5,10 +5,11 @@ import { LIST_CATEGORIES } from '@/domain/lib/graphql/queries/category'
 import type { Transaction, Category } from '@/domain/types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card'
 import { Button } from '@/presentation/components/ui/button'
-import { ArrowUpCircle, ArrowDownCircle, Wallet, Plus, ArrowRight } from 'lucide-react'
+import { ArrowUpCircle, ArrowDownCircle, Wallet, Plus, ChevronRight } from 'lucide-react'
 import { getCategoryColorClass } from '@/presentation/utils/category-colors'
 import { CreateTransactionDialog } from '../Transactions/components/CreateTransactionDialog'
 import { useState } from 'react'
+import { Separator } from '@/presentation/components/ui/separator'
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
@@ -69,11 +70,11 @@ export function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center mb-2 gap-3">
+              <Wallet className="h-5 w-5 text-purple-500" />
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Saldo Total</p>
-              <Wallet className="h-4 w-4 text-muted-foreground" />
             </div>
-            <p className={`text-2xl font-bold ${totalBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={"text-2xl font-bold text-grey-600"}>
               {txLoading ? '...' : formatCurrency(totalBalance)}
             </p>
           </CardContent>
@@ -81,11 +82,11 @@ export function Dashboard() {
 
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center mb-2 gap-3">
+              <ArrowUpCircle className="h-5 w-5 text-brand-base" />
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Receitas do Mês</p>
-              <ArrowUpCircle className="h-4 w-4 text-green-500" />
             </div>
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-2xl font-bold text-grey-600">
               {txLoading ? '...' : formatCurrency(monthlyIncome)}
             </p>
           </CardContent>
@@ -93,11 +94,11 @@ export function Dashboard() {
 
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center mb-2 gap-3">
+              <ArrowDownCircle className="h-5 w-5 text-red-500" />
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Despesas do Mês</p>
-              <ArrowDownCircle className="h-4 w-4 text-red-500" />
             </div>
-            <p className="text-2xl font-bold text-red-600">
+            <p className="text-2xl font-bold text-grey-600">
               {txLoading ? '...' : formatCurrency(monthlyExpenses)}
             </p>
           </CardContent>
@@ -112,11 +113,12 @@ export function Dashboard() {
               Transações Recentes
             </CardTitle>
             <Link to="/transactions">
-              <Button variant="ghost" size="sm" className="text-xs gap-1">
-                Ver todas <ArrowRight className="h-3 w-3" />
+              <Button variant="ghost" size="sm" className="text-[14px] gap-1 text-brand-base">
+                Ver todas <ChevronRight className="h-5 w-5" />
               </Button>
             </Link>
           </CardHeader>
+          <Separator className='my-0' />
           <CardContent className="space-y-3">
             {txLoading && (
               <div className="space-y-3">
@@ -151,15 +153,16 @@ export function Dashboard() {
                 </div>
               </div>
             ))}
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full mt-2 gap-2"
-              onClick={() => setOpenDialog(true)}
-            >
-              <Plus className="h-3 w-3" /> Nova transação
-            </Button>
           </CardContent>
+          <Separator className='my-0' />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full my-5 gap-1 text-brand-base text-sm"
+            onClick={() => setOpenDialog(true)}
+          >
+            <Plus className="h-5 w-5" /> Nova transação
+          </Button>
         </Card>
 
         {/* Categories */}
@@ -169,8 +172,8 @@ export function Dashboard() {
               Categorias
             </CardTitle>
             <Link to="/categories">
-              <Button variant="ghost" size="sm" className="text-xs gap-1">
-                Gerenciar <ArrowRight className="h-3 w-3" />
+              <Button variant="ghost" size="sm" className="text-[14px] gap-1 text-brand-base">
+                Gerenciar <ChevronRight className="h-5 w-5" />
               </Button>
             </Link>
           </CardHeader>
@@ -180,13 +183,16 @@ export function Dashboard() {
             )}
             {categoryStats.slice(0, 5).map((cat) => (
               <div key={cat.id} className="flex items-center justify-between">
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getCategoryColorClass(cat.color)}`}>
+                <span className={`text-md px-2 py-0.5 rounded-full font-medium ${getCategoryColorClass(cat.color)}`}>
                   {cat.name}
                 </span>
                 <div className="text-right">
-                  <p className="text-xs text-muted-foreground">{cat.count} itens</p>
+                  <p className="text-md text-muted-foreground">{cat.count} itens</p>
                   {cat.total > 0 && <p className="text-xs font-medium">{formatCurrency(cat.total)}</p>}
                 </div>
+                <span className={`text-md px-2 py-0.5 font-medium`}>
+                  {cat.name}
+                </span>
               </div>
             ))}
           </CardContent>

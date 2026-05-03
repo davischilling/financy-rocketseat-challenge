@@ -3,6 +3,7 @@ import { useAuthStore } from '@/domain/stores/auth'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import { LogOut, LayoutDashboard, ArrowLeftRight, Tag } from 'lucide-react'
+import logo from "@/assets/Logo.png"
 
 export function Header() {
   const { user, logout, isAuthenticated } = useAuthStore()
@@ -27,10 +28,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex items-center gap-1.5">
-            <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-bold">F</span>
-            </div>
-            <span className="text-lg font-bold text-primary tracking-wide">FINANCY</span>
+            <img src={logo} alt="Financy Logo" className="w-34 h-8" />
           </div>
         </Link>
 
