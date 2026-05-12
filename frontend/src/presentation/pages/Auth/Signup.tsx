@@ -17,7 +17,7 @@ export function Signup() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const signup = useAuthStore((s) => s.signup)
+  const signup = useAuthStore((s: { signup: Function }) => s.signup)
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {

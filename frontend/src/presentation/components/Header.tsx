@@ -61,7 +61,7 @@ export function Header() {
             </Avatar>
           </Link>
           <Button variant="ghost" size="icon" onClick={handleLogout} className="h-8 w-8">
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-4 w-4 text-red-dark" />
           </Button>
         </div>
       </div>

@@ -8,6 +8,7 @@ import { Input } from '@/presentation/components/ui/input'
 import { Label } from '@/presentation/components/ui/label'
 import { Avatar, AvatarFallback } from '@/presentation/components/ui/avatar'
 import { Mail, LogOut } from 'lucide-react'
+import { Separator } from '@radix-ui/react-separator'
 
 export function ProfilePage() {
   const { user, updateUser, logout } = useAuthStore()
@@ -49,7 +50,7 @@ export function ProfilePage() {
               <p className="text-sm text-muted-foreground">{user?.email}</p>
             </div>
           </div>
-
+        
           <form onSubmit={handleSave} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="name">Nome completo</Label>
@@ -91,7 +92,7 @@ export function ProfilePage() {
             className="w-full gap-2 text-muted-foreground"
             onClick={handleLogout}
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-4 w-4 text-red-dark" />
             Sair da conta
           </Button>
         </CardContent>
