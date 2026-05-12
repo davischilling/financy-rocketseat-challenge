@@ -29,6 +29,7 @@ export function CreateTransactionDialog({ open, onOpenChange, categories, onCrea
   const [categoryId, setCategoryId] = useState('')
 
   const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
+    refetchQueries: ['Stats'],
     onCompleted() {
       toast.success('Transação criada com sucesso!')
       onOpenChange(false)

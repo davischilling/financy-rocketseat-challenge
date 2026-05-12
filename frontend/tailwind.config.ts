@@ -6,6 +6,7 @@ export default {
       colors: {
         'brand-base': '#1F6F43',
         'brand-dark': '#124B2B',
+        'danger': '#EF4444',
       },
     },
   },

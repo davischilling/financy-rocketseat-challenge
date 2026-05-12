@@ -3,6 +3,7 @@ import { useAuthStore } from '@/domain/stores/auth'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import { LogOut, LayoutDashboard, ArrowLeftRight, Tag } from 'lucide-react'
+import { cn } from '@/presentation/utils/utils'
 import logo from "@/assets/Logo.png"
 
 export function Header() {
@@ -36,9 +37,14 @@ export function Header() {
           {navItems.map(({ path, label }) => (
             <Link key={path} to={path}>
               <Button
-                variant={location.pathname === path ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
-                className="text-sm"
+                className={cn(
+                  'text-sm',
+                  location.pathname === path
+                    ? 'text-primary font-semibold'
+                    : 'text-muted-foreground'
+                )}
               >
                 {label}
               </Button>
