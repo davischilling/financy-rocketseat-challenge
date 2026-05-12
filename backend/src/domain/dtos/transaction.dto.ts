@@ -1,4 +1,4 @@
-import { Field, Float, InputType, registerEnumType } from 'type-graphql'
+import { Field, Float, GraphQLISODateTime, InputType, registerEnumType } from 'type-graphql'
 
 export const TransactionType = {
   INCOME: 'INCOME',
@@ -15,12 +15,14 @@ export class CreateTransactionInput {
     title: string,
     value: number,
     type: TransactionType,
-    categoryId?: string | null
+    categoryId?: string | null,
+    date?: Date | null
   ) {
     this.title = title
     this.value = value
     this.type = type
     this.categoryId = categoryId ?? null
+    this.date = date ?? null
   }
 
   @Field(() => String)
@@ -34,6 +36,9 @@ export class CreateTransactionInput {
 
   @Field(() => String, { nullable: true })
   categoryId?: string | null
+
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  date?: Date | null
 }
 
 @InputType()
@@ -42,12 +47,14 @@ export class UpdateTransactionInput {
     title?: string | null,
     value?: number | null,
     type?: TransactionType | null,
-    categoryId?: string | null
+    categoryId?: string | null,
+    date?: Date | null
   ) {
     this.title = title ?? null
     this.value = value ?? null
     this.type = type ?? null
     this.categoryId = categoryId ?? null
+    this.date = date ?? null
   }
 
   @Field(() => String, { nullable: true })
@@ -61,5 +68,8 @@ export class UpdateTransactionInput {
 
   @Field(() => String, { nullable: true })
   categoryId?: string | null
+
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  date?: Date | null
 }
 

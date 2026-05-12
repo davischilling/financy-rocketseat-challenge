@@ -58,6 +58,7 @@ export function CreateTransactionDialog({ open, onOpenChange, categories, onCrea
           value: parseFloat(value),
           type,
           categoryId: categoryId || null,
+          date: date ? new Date(`${date}T12:00:00`).toISOString() : null,
         },
       },
     })

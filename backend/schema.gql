@@ -23,6 +23,7 @@ input CreateCategoryInput {
 
 input CreateTransactionInput {
   categoryId: String = null
+  date: DateTimeISO = null
   title: String!
   type: TransactionType!
   value: Float!
@@ -121,6 +122,7 @@ input UpdateCategoryInput {
 
 input UpdateTransactionInput {
   categoryId: String = null
+  date: DateTimeISO = null
   title: String = null
   type: TransactionType = null
   value: Float = null

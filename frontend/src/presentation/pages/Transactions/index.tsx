@@ -10,6 +10,9 @@ import { Input } from '@/presentation/components/ui/input'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/presentation/components/ui/select'
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
+} from '@/presentation/components/ui/dialog'
 import { CreateTransactionDialog } from './components/CreateTransactionDialog'
 import { EditTransactionDialog } from './components/EditTransactionDialog'
 import {
@@ -62,6 +65,7 @@ export function TransactionsPage() {
   const [createOpen, setCreateOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [selected, setSelected] = useState<Transaction | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('all')
   const [categoryFilter, setCategoryFilter] = useState('all')
@@ -103,10 +107,11 @@ export function TransactionsPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-  const handleDelete = (id: string) => {
-    if (confirm('Deseja excluir esta transação?')) {
-      deleteTransaction({ variables: { id } })
-    }
+  const handleDelete = (id: string) => setDeleteTarget(id)
+
+  const handleConfirmDelete = () => {
+    if (deleteTarget) deleteTransaction({ variables: { id: deleteTarget } })
+    setDeleteTarget(null)
   }
 
   const handleEdit = (tx: Transaction) => {
@@ -314,6 +319,21 @@ export function TransactionsPage() {
         categories={categories}
         onUpdated={() => refetch()}
       />
+
+      <Dialog open={deleteTarget !== null} onOpenChange={(open) => { if (!open) setDeleteTarget(null) }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Excluir transação</DialogTitle>
+            <DialogDescription>
+              Deseja excluir esta transação? Esta ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-3 justify-end mt-2">
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>Não</Button>
+            <Button variant="destructive" onClick={handleConfirmDelete}>Sim</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

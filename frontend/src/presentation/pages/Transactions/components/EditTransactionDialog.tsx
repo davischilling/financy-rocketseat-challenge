@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { UPDATE_TRANSACTION } from '@/domain/lib/graphql/mutations/transaction'
 import type { Transaction, Category } from '@/domain/types'
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '@/presentation/components/ui/dialog'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
@@ -12,6 +12,7 @@ import { Label } from '@/presentation/components/ui/label'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/presentation/components/ui/select'
+import { CircleArrowDown, CircleArrowUp } from 'lucide-react'
 
 interface Props {
   open: boolean
@@ -25,6 +26,7 @@ export function EditTransactionDialog({ open, onOpenChange, transaction, categor
   const [type, setType] = useState<'EXPENSE' | 'INCOME'>('EXPENSE')
   const [title, setTitle] = useState('')
   const [value, setValue] = useState('')
+  const [date, setDate] = useState('')
   const [categoryId, setCategoryId] = useState('')
 
   useEffect(() => {
@@ -33,10 +35,12 @@ export function EditTransactionDialog({ open, onOpenChange, transaction, categor
       setTitle(transaction.title)
       setValue(String(transaction.value))
       setCategoryId(transaction.categoryId ?? '')
+      setDate(new Date(transaction.createdAt).toISOString().slice(0, 10))
     }
   }, [transaction])
 
   const [updateTransaction, { loading }] = useMutation(UPDATE_TRANSACTION, {
+    refetchQueries: ['Stats'],
     onCompleted() {
       toast.success('Transação atualizada!')
       onOpenChange(false)
@@ -58,6 +62,7 @@ export function EditTransactionDialog({ open, onOpenChange, transaction, categor
           value: parseFloat(value),
           type,
           categoryId: categoryId || null,
+          date: date ? new Date(`${date}T12:00:00`).toISOString() : null,
         },
       },
     })
@@ -68,34 +73,56 @@ export function EditTransactionDialog({ open, onOpenChange, transaction, categor
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Editar transação</DialogTitle>
+          <DialogDescription>Edite sua despesa ou receita</DialogDescription>
         </DialogHeader>
 
-        <div className="flex gap-2 mb-2">
-          <Button
+        <div className="flex gap-2 mb-2 rounded-xl border-2 border-border p-1">
+          <button
             type="button"
-            variant={type === 'EXPENSE' ? 'default' : 'outline'}
-            className="flex-1"
             onClick={() => setType('EXPENSE')}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-2.5 text-sm font-medium transition-colors
+              ${type === 'EXPENSE'
+                ? 'border-red-500 text-red-500 bg-red-50'
+                : 'border-transparent text-muted-foreground hover:text-red-400'
+              }`}
           >
-            Despesa
-          </Button>
-          <Button
+            <CircleArrowDown className="h-4 w-4" /> Despesa
+          </button>
+          <button
             type="button"
-            variant={type === 'INCOME' ? 'default' : 'outline'}
-            className={`flex-1 ${type === 'INCOME' ? 'bg-green-600 hover:bg-green-700' : ''}`}
             onClick={() => setType('INCOME')}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-2.5 text-sm font-medium transition-colors
+              ${type === 'INCOME'
+                ? 'border-green-600 text-green-600 bg-green-50'
+                : 'border-transparent text-muted-foreground hover:text-green-500'
+              }`}
           >
-            Receita
-          </Button>
+            <CircleArrowUp className="h-4 w-4" /> Receita
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label>Descrição</Label>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)} required />
+            <Input
+              className="h-12"
+              placeholder="Ex. Almoço no restaurante"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Data</Label>
+              <Input
+                className="h-12"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
             <div className="space-y-1.5">
               <Label>Valor</Label>
               <div className="relative">
@@ -104,36 +131,33 @@ export function EditTransactionDialog({ open, onOpenChange, transaction, categor
                   type="number"
                   step="0.01"
                   min="0"
+                  placeholder="0,00"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
-                  className="pl-9"
+                  className="h-12 pl-9"
                   required
                 />
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label>Categoria</Label>
-              <Select value={categoryId} onValueChange={setCategoryId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Salvando...' : 'Salvar'}
-            </Button>
+          <div className="space-y-1.5">
+            <Label>Categoria</Label>
+            <Select value={categoryId} onValueChange={setCategoryId}>
+              <SelectTrigger className="h-12">
+                <SelectValue placeholder="Selecione" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
+
+          <Button type="submit" disabled={loading} className="w-full mt-2 h-12">
+            {loading ? 'Salvando...' : 'Salvar'}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

@@ -24,6 +24,7 @@ export class TransactionService {
         type: data.type,
         categoryId: data.categoryId ?? null,
         userId,
+        ...(data.date != null && { createdAt: data.date }),
       },
     })
   }
@@ -73,6 +74,7 @@ export class TransactionService {
         ...(data.value != null && { value: data.value }),
         ...(data.type != null && { type: data.type }),
         ...(data.categoryId !== undefined && { categoryId: data.categoryId }),
+        ...(data.date != null && { createdAt: data.date }),
       },
     })
   }
