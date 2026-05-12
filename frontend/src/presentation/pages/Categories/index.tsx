@@ -15,30 +15,27 @@ import { Plus, Trash, SquarePen, Tag, ArrowLeftRight } from 'lucide-react'
 import { getCategoryColorClass } from '@/presentation/utils/category-colors'
 import { cn } from '@/presentation/utils/utils'
 import {
-  ShoppingCart, Utensils, Car, Home, Music, Film,
-  Heart, Briefcase, Coffee, Book, Dumbbell, Smartphone,
-  Plane, Gift, DollarSign, PiggyBank, TrendingUp, Zap,
+  Briefcase, Car, Heart, PiggyBank, ShoppingCart, Ticket, Gift, Utensils,
+  Coffee, Home, Wrench, Dumbbell, Book, ShoppingBag, Monitor, Receipt,
 } from 'lucide-react'
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  'utensils': Utensils,
+  'briefcase':     Briefcase,
+  'car':           Car,
+  'heart':         Heart,
+  'piggy-bank':    PiggyBank,
   'shopping-cart': ShoppingCart,
-  'car': Car,
-  'home': Home,
-  'music': Music,
-  'film': Film,
-  'heart': Heart,
-  'briefcase': Briefcase,
-  'coffee': Coffee,
-  'book': Book,
-  'dumbbell': Dumbbell,
-  'smartphone': Smartphone,
-  'plane': Plane,
-  'gift': Gift,
-  'dollar-sign': DollarSign,
-  'piggy-bank': PiggyBank,
-  'trending-up': TrendingUp,
-  'zap': Zap,
+  'ticket':        Ticket,
+  'gift':          Gift,
+  'utensils':      Utensils,
+  'coffee':        Coffee,
+  'home':          Home,
+  'wrench':        Wrench,
+  'dumbbell':      Dumbbell,
+  'book':          Book,
+  'shopping-bag':  ShoppingBag,
+  'monitor':       Monitor,
+  'receipt':       Receipt,
 }
 
 function CategoryIcon({ icon, color, className }: { icon?: string | null; color?: string | null; className?: string }) {

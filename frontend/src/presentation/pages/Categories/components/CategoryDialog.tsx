@@ -12,30 +12,27 @@ import { Label } from '@/presentation/components/ui/label'
 import { COLOR_OPTIONS } from '@/presentation/utils/category-colors'
 import { cn } from '@/presentation/utils/utils'
 import {
-  ShoppingCart, Utensils, Car, Home, Music, Film,
-  Heart, Briefcase, Coffee, Book, Dumbbell, Smartphone,
-  Plane, Gift, DollarSign, PiggyBank, TrendingUp, Zap,
+  Briefcase, Car, Heart, PiggyBank, ShoppingCart, Ticket, Gift, Utensils,
+  Coffee, Home, Wrench, Dumbbell, Book, ShoppingBag, Monitor, Receipt,
 } from 'lucide-react'
 
 const ICONS = [
-  { name: 'utensils', Icon: Utensils },
+  { name: 'briefcase',     Icon: Briefcase },
+  { name: 'car',           Icon: Car },
+  { name: 'heart',         Icon: Heart },
+  { name: 'piggy-bank',    Icon: PiggyBank },
   { name: 'shopping-cart', Icon: ShoppingCart },
-  { name: 'car', Icon: Car },
-  { name: 'home', Icon: Home },
-  { name: 'music', Icon: Music },
-  { name: 'film', Icon: Film },
-  { name: 'heart', Icon: Heart },
-  { name: 'briefcase', Icon: Briefcase },
-  { name: 'coffee', Icon: Coffee },
-  { name: 'book', Icon: Book },
-  { name: 'dumbbell', Icon: Dumbbell },
-  { name: 'smartphone', Icon: Smartphone },
-  { name: 'plane', Icon: Plane },
-  { name: 'gift', Icon: Gift },
-  { name: 'dollar-sign', Icon: DollarSign },
-  { name: 'piggy-bank', Icon: PiggyBank },
-  { name: 'trending-up', Icon: TrendingUp },
-  { name: 'zap', Icon: Zap },
+  { name: 'ticket',        Icon: Ticket },
+  { name: 'gift',          Icon: Gift },
+  { name: 'utensils',      Icon: Utensils },
+  { name: 'coffee',        Icon: Coffee },
+  { name: 'home',          Icon: Home },
+  { name: 'wrench',        Icon: Wrench },
+  { name: 'dumbbell',      Icon: Dumbbell },
+  { name: 'book',          Icon: Book },
+  { name: 'shopping-bag',  Icon: ShoppingBag },
+  { name: 'monitor',       Icon: Monitor },
+  { name: 'receipt',       Icon: Receipt },
 ]
 
 interface Props {
@@ -108,6 +105,7 @@ export function CategoryDialog({ open, onOpenChange, category, onSaved }: Props)
           <div className="space-y-1.5">
             <Label>Título</Label>
             <Input
+              className="h-12"
               placeholder="Ex. Alimentação"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -118,15 +116,17 @@ export function CategoryDialog({ open, onOpenChange, category, onSaved }: Props)
           <div className="space-y-1.5">
             <Label>Descrição</Label>
             <Input
+              className="h-12"
               placeholder="Descrição da categoria"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+            <p className="text-xs text-muted-foreground">Opcional</p>
           </div>
 
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-xs">Ícone <span className="italic">(opcional)</span></Label>
-            <div className="grid grid-cols-9 gap-1.5">
+            <Label>Ícone</Label>
+            <div className="grid grid-cols-8 gap-1.5">
               {ICONS.map(({ name: n, Icon }) => (
                 <button
                   key={n}
@@ -145,7 +145,7 @@ export function CategoryDialog({ open, onOpenChange, category, onSaved }: Props)
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 gap-4">
             <Label>Cor</Label>
             <div className="flex gap-2">
               {COLOR_OPTIONS.map((c) => (
@@ -154,23 +154,20 @@ export function CategoryDialog({ open, onOpenChange, category, onSaved }: Props)
                   type="button"
                   onClick={() => setColor(color === c.value ? '' : c.value)}
                   className={cn(
-                    'w-8 h-8 rounded-full transition-transform',
+                    'flex-1 h-10 rounded-lg transition-transform',
                     c.bg,
-                    color === c.value ? 'ring-2 ring-offset-2 ring-foreground scale-110' : 'hover:scale-105'
+                    color === c.value
+                      ? 'ring-2 ring-offset-2 ring-foreground scale-75'
+                      : 'hover:scale-85'
                   )}
                 />
               ))}
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Salvando...' : 'Salvar'}
-            </Button>
-          </div>
+          <Button type="submit" disabled={loading} className="w-full h-12">
+            {loading ? 'Salvando...' : 'Salvar'}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
