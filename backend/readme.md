@@ -9,11 +9,11 @@ Nesse projeto back-end, será desenvolvido uma API para gerenciar a organizaçã
 ## Funcionalidades e Regras
 
 - [X] O usuário pode criar uma conta e fazer login
-- [ ] O usuário pode ver e gerenciar apenas as transações e categorias criadas por ele
-- Deve ser possível criar uma transação
-- Deve ser possível deletar uma transação
-- Deve ser possível editar uma transação
-- Deve ser possível listar todas as transações
+- [X] O usuário pode ver e gerenciar apenas as transações e categorias criadas por ele
+- [X] Deve ser possível criar uma transação
+- [X] Deve ser possível deletar uma transação
+- [X] Deve ser possível editar uma transação
+- [X] Deve ser possível listar todas as transações
 - [X] Deve ser possível criar uma categoria
 - [X] Deve ser possível deletar uma categoria
 - [X] Deve ser possível editar uma categoria
@@ -36,13 +36,13 @@ Caso adicione variáveis adicionais, lembre-se de incluí-las no .env.example.
 
 É obrigatório o uso de:
 
-- TypeScript
-- GraphQL
-- Prisma
-- SQLite
+- [X] TypeScript
+- [X] GraphQL
+- [X] Prisma
+- [X] SQLite
 ## Boas Práticas
 
-- Não se esqueça de habilitar o CORS na aplicação.
+- [X] Não se esqueça de habilitar o CORS na aplicação.
 
 ## Quer ir além?
 
