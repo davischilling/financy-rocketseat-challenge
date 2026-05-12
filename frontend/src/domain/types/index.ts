@@ -67,3 +67,12 @@ export interface UpdateCategoryInput {
   icon?: string | null
   color?: string | null
 }
+
+export interface Stats {
+  totalCategoriesCount: number
+  totalTransactionsCount: number
+  mostUsedCategory: Pick<Category, 'id' | 'name' | 'icon' | 'color'> | null
+  totalBalance: number
+  monthlyIncome: number
+  monthlyExpense: number
+}

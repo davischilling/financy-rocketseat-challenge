@@ -2,7 +2,8 @@ import { useQuery } from '@apollo/client/react'
 import { Link } from 'react-router-dom'
 import { LIST_TRANSACTIONS } from '@/domain/lib/graphql/queries/transaction'
 import { LIST_CATEGORIES } from '@/domain/lib/graphql/queries/category'
-import type { Transaction, Category } from '@/domain/types'
+import { GET_STATS } from '@/domain/lib/graphql/queries/stats'
+import type { Transaction, Category, Stats } from '@/domain/types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card'
 import { Button } from '@/presentation/components/ui/button'
 import { ArrowUpCircle, ArrowDownCircle, Wallet, Plus, ChevronRight } from 'lucide-react'
@@ -23,29 +24,11 @@ export function Dashboard() {
   const [openDialog, setOpenDialog] = useState(false)
   const { data: txData, loading: txLoading, refetch } = useQuery<{ listTransactions: Transaction[] }>(LIST_TRANSACTIONS)
   const { data: catData } = useQuery<{ listCategories: Category[] }>(LIST_CATEGORIES)
+  const { data: statsData, loading: statsLoading } = useQuery<{ stats: Stats }>(GET_STATS)
 
   const transactions = txData?.listTransactions ?? []
   const categories = catData?.listCategories ?? []
-
-  const totalBalance = transactions.reduce((acc, t) => {
-    return t.type === 'INCOME' ? acc + t.value : acc - t.value
-  }, 0)
-
-  const monthlyIncome = transactions
-    .filter((t) => {
-      const d = new Date(t.createdAt)
-      const now = new Date()
-      return t.type === 'INCOME' && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-    })
-    .reduce((acc, t) => acc + t.value, 0)
-
-  const monthlyExpenses = transactions
-    .filter((t) => {
-      const d = new Date(t.createdAt)
-      const now = new Date()
-      return t.type === 'EXPENSE' && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-    })
-    .reduce((acc, t) => acc + t.value, 0)
+  const stats = statsData?.stats
 
   const recentTransactions = transactions.slice(0, 5)
 
@@ -75,7 +58,7 @@ export function Dashboard() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Saldo Total</p>
             </div>
             <p className={"text-2xl font-bold text-grey-600"}>
-              {txLoading ? '...' : formatCurrency(totalBalance)}
+              {statsLoading ? '...' : formatCurrency(stats?.totalBalance ?? 0)}
             </p>
           </CardContent>
         </Card>
@@ -87,7 +70,7 @@ export function Dashboard() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Receitas do Mês</p>
             </div>
             <p className="text-2xl font-bold text-grey-600">
-              {txLoading ? '...' : formatCurrency(monthlyIncome)}
+              {statsLoading ? '...' : formatCurrency(stats?.monthlyIncome ?? 0)}
             </p>
           </CardContent>
         </Card>
@@ -99,7 +82,7 @@ export function Dashboard() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Despesas do Mês</p>
             </div>
             <p className="text-2xl font-bold text-grey-600">
-              {txLoading ? '...' : formatCurrency(monthlyExpenses)}
+              {statsLoading ? '...' : formatCurrency(stats?.monthlyExpense ?? 0)}
             </p>
           </CardContent>
         </Card>
@@ -119,7 +102,7 @@ export function Dashboard() {
             </Link>
           </CardHeader>
           <Separator className='my-0' />
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-3 mt-3">
             {txLoading && (
               <div className="space-y-3">
                 {Array.from({ length: 4 }).map((_, i) => (
@@ -182,17 +165,14 @@ export function Dashboard() {
               <p className="text-sm text-muted-foreground text-center py-4">Nenhuma categoria.</p>
             )}
             {categoryStats.slice(0, 5).map((cat) => (
-              <div key={cat.id} className="flex items-center justify-between">
-                <span className={`text-md px-2 py-0.5 rounded-full font-medium ${getCategoryColorClass(cat.color)}`}>
+              <div key={cat.id} className="flex items-center justify-between gap-2 py-1">
+                <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${getCategoryColorClass(cat.color)}`}>
                   {cat.name}
                 </span>
-                <div className="text-right">
-                  <p className="text-md text-muted-foreground">{cat.count} itens</p>
-                  {cat.total > 0 && <p className="text-xs font-medium">{formatCurrency(cat.total)}</p>}
+                <div className='flex-row gap-2 items-center hidden sm:flex'>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">{cat.count} {cat.count === 1 ? 'item' : 'itens'}</span>
+                  <span className="text-xs font-semibold whitespace-nowrap ml-auto">{formatCurrency(cat.total)}</span>
                 </div>
-                <span className={`text-md px-2 py-0.5 font-medium`}>
-                  {cat.name}
-                </span>
               </div>
             ))}
           </CardContent>

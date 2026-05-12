@@ -3,8 +3,9 @@ import { useQuery, useMutation } from '@apollo/client/react'
 import { toast } from 'sonner'
 import { LIST_CATEGORIES } from '@/domain/lib/graphql/queries/category'
 import { LIST_TRANSACTIONS } from '@/domain/lib/graphql/queries/transaction'
+import { GET_STATS } from '@/domain/lib/graphql/queries/stats'
 import { DELETE_CATEGORY } from '@/domain/lib/graphql/mutations/category'
-import type { Category, Transaction } from '@/domain/types'
+import type { Category, Transaction, Stats } from '@/domain/types'
 import { Button } from '@/presentation/components/ui/button'
 import { CategoryDialog } from './components/CategoryDialog'
 import { Plus, Trash2, Pencil, Tag, ArrowLeftRight } from 'lucide-react'
@@ -52,6 +53,7 @@ export function CategoriesPage() {
 
   const { data: catData, loading, refetch } = useQuery<{ listCategories: Category[] }>(LIST_CATEGORIES)
   const { data: txData } = useQuery<{ listTransactions: Transaction[] }>(LIST_TRANSACTIONS)
+  const { data: statsData } = useQuery<{ stats: Stats }>(GET_STATS)
 
   const [deleteCategory] = useMutation(DELETE_CATEGORY, {
     onCompleted() { toast.success('Categoria excluída'); refetch() },
@@ -60,12 +62,7 @@ export function CategoriesPage() {
 
   const categories = catData?.listCategories ?? []
   const transactions = txData?.listTransactions ?? []
-
-  const mostUsed = categories.reduce<Category | null>((acc, cat) => {
-    const count = transactions.filter((t) => t.categoryId === cat.id).length
-    const accCount = acc ? transactions.filter((t) => t.categoryId === acc.id).length : -1
-    return count > accCount ? cat : acc
-  }, null)
+  const stats = statsData?.stats
 
   const handleDelete = (id: string) => {
     if (confirm('Deseja excluir esta categoria? As transações vinculadas perderão a categoria.')) {
@@ -102,7 +99,7 @@ export function CategoriesPage() {
             <Tag className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="text-2xl font-bold">{categories.length}</p>
+            <p className="text-2xl font-bold">{stats?.totalCategoriesCount ?? categories.length}</p>
             <p className="text-xs text-muted-foreground uppercase tracking-wide">Total de categorias</p>
           </div>
         </div>
@@ -111,14 +108,14 @@ export function CategoriesPage() {
             <ArrowLeftRight className="h-5 w-5 text-blue-600" />
           </div>
           <div>
-            <p className="text-2xl font-bold">{transactions.length}</p>
+            <p className="text-2xl font-bold">{stats?.totalTransactionsCount ?? transactions.length}</p>
             <p className="text-xs text-muted-foreground uppercase tracking-wide">Total de transações</p>
           </div>
         </div>
         <div className="bg-white rounded-xl border border-border p-4 flex items-center gap-4">
-          {mostUsed && <CategoryIcon icon={mostUsed.icon} color={mostUsed.color} />}
+          {stats?.mostUsedCategory && <CategoryIcon icon={stats.mostUsedCategory.icon} color={stats.mostUsedCategory.color} />}
           <div>
-            <p className="text-xl font-bold">{mostUsed?.name ?? '—'}</p>
+            <p className="text-xl font-bold">{stats?.mostUsedCategory?.name ?? '—'}</p>
             <p className="text-xs text-muted-foreground uppercase tracking-wide">Categoria mais usada</p>
           </div>
         </div>

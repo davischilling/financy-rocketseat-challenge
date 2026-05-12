@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from '@/presentation/components/Layout'
 import { Login } from '@/presentation/pages/Auth/Login'
@@ -19,6 +20,21 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  useEffect(() => {
+    const { token, isAuthenticated, refresh, logout } = useAuthStore.getState()
+    if (!isAuthenticated || !token) return
+    try {
+      // base64url → base64 before decoding
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
+      const { exp } = JSON.parse(atob(base64))
+      if (exp * 1000 < Date.now()) {
+        refresh().then((success) => { if (!success) logout() })
+      }
+    } catch {
+      logout()
+    }
+  }, [])
+
   return (
     <Layout>
       <Routes>

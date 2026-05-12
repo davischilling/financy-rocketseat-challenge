@@ -12,6 +12,7 @@ import { Label } from '@/presentation/components/ui/label'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/presentation/components/ui/select'
+import { CircleArrowDown, CircleArrowUp } from 'lucide-react'
 
 interface Props {
   open: boolean
@@ -69,29 +70,36 @@ export function CreateTransactionDialog({ open, onOpenChange, categories, onCrea
           <DialogDescription>Registre sua despesa ou receita</DialogDescription>
         </DialogHeader>
 
-        <div className="flex gap-2 mb-2">
-          <Button
+        <div className="flex gap-2 mb-2 rounded-xl border-2 border-border p-1">
+          <button
             type="button"
-            variant={type === 'EXPENSE' ? 'default' : 'outline'}
-            className={`flex-1 gap-2 ${type === 'EXPENSE' ? 'bg-primary' : ''}`}
             onClick={() => setType('EXPENSE')}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-2.5 text-sm font-medium transition-colors
+              ${type === 'EXPENSE'
+                ? 'border-red-500 text-red-500 bg-red-50'
+                : 'border-transparent text-muted-foreground hover:text-red-400'
+              }`}
           >
-            Despesa
-          </Button>
-          <Button
+            <CircleArrowDown className="h-4 w-4" /> Despesa
+          </button>
+          <button
             type="button"
-            variant={type === 'INCOME' ? 'default' : 'outline'}
-            className={`flex-1 gap-2 ${type === 'INCOME' ? 'bg-green-600 hover:bg-green-700' : ''}`}
             onClick={() => setType('INCOME')}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-2.5 text-sm font-medium transition-colors
+              ${type === 'INCOME'
+                ? 'border-green-600 text-green-600 bg-green-50'
+                : 'border-transparent text-muted-foreground hover:text-green-500'
+              }`}
           >
-            Receita
-          </Button>
+            <CircleArrowUp className="h-4 w-4" /> Receita
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label>Descrição</Label>
             <Input
+              className="h-12"
               placeholder="Ex. Almoço no restaurante"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -103,6 +111,7 @@ export function CreateTransactionDialog({ open, onOpenChange, categories, onCrea
             <div className="space-y-1.5">
               <Label>Data</Label>
               <Input
+                className="h-12"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -119,7 +128,7 @@ export function CreateTransactionDialog({ open, onOpenChange, categories, onCrea
                   placeholder="0,00"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
-                  className="pl-9"
+                  className="h-12 pl-9"
                   required
                 />
               </div>
@@ -129,7 +138,7 @@ export function CreateTransactionDialog({ open, onOpenChange, categories, onCrea
           <div className="space-y-1.5">
             <Label>Categoria</Label>
             <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger>
+              <SelectTrigger className="h-12">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
@@ -140,14 +149,9 @@ export function CreateTransactionDialog({ open, onOpenChange, categories, onCrea
             </Select>
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => { onOpenChange(false); reset() }}>
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Salvando...' : 'Salvar'}
-            </Button>
-          </div>
+          <Button type="submit" disabled={loading} className="w-full mt-2 h-12">
+            {loading ? 'Salvando...' : 'Salvar'}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
