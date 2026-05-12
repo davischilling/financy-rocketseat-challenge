@@ -11,6 +11,7 @@ import { getCategoryColorClass } from '@/presentation/utils/category-colors'
 import { CreateTransactionDialog } from '../Transactions/components/CreateTransactionDialog'
 import { useState } from 'react'
 import { Separator } from '@/presentation/components/ui/separator'
+import { CategoryIcon } from '../Categories'
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
@@ -116,23 +117,27 @@ export function Dashboard() {
             {!txLoading && recentTransactions.map((tx) => (
               <div key={tx.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                 <div className="flex items-center gap-3">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs ${getCategoryColorClass(tx.category?.color)}`}>
-                    {tx.category?.name?.[0]?.toUpperCase() ?? '?'}
-                  </div>
-                  <div>
+                  <CategoryIcon icon={tx.category?.icon} color={tx.category?.color} />
+                  <div className="flex flex-col gap-1">
                     <p className="text-sm font-medium">{tx.title}</p>
                     <p className="text-xs text-muted-foreground">{formatDate(tx.createdAt)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   {tx.category && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getCategoryColorClass(tx.category.color)}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${getCategoryColorClass(tx.category.color)}`}>
                       {tx.category.name}
                     </span>
                   )}
-                  <span className={`text-sm font-semibold ${tx.type === 'INCOME' ? 'text-green-600' : 'text-red-600'}`}>
-                    {tx.type === 'INCOME' ? '+' : '-'} {formatCurrency(tx.value)}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-sm font-semibold`}>
+                      {tx.type === 'INCOME' ? '+' : '-'} {formatCurrency(tx.value)}
+                    </span>
+                    {tx.type === 'INCOME' ?
+                      <ArrowUpCircle className="h-5 w-5 text-brand-base" /> :
+                      <ArrowDownCircle className="h-5 w-5 text-red-500" />
+                    }
+                  </div>
                 </div>
               </div>
             ))}
@@ -165,11 +170,11 @@ export function Dashboard() {
               <p className="text-sm text-muted-foreground text-center py-4">Nenhuma categoria.</p>
             )}
             {categoryStats.slice(0, 5).map((cat) => (
-              <div key={cat.id} className="flex items-center justify-between gap-2 py-1">
+              <div key={cat.id} className="flex items-center justify-between py-1">
                 <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${getCategoryColorClass(cat.color)}`}>
                   {cat.name}
                 </span>
-                <div className='flex-row gap-2 items-center hidden sm:flex'>
+                <div className='flex-row gap-3 items-center hidden sm:flex'>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">{cat.count} {cat.count === 1 ? 'item' : 'itens'}</span>
                   <span className="text-xs font-semibold whitespace-nowrap ml-auto">{formatCurrency(cat.total)}</span>
                 </div>

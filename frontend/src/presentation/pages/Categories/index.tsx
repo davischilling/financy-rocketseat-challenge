@@ -38,7 +38,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   'receipt':       Receipt,
 }
 
-function CategoryIcon({ icon, color, className }: { icon?: string | null; color?: string | null; className?: string }) {
+export function CategoryIcon({ icon, color, className }: { icon?: string | null; color?: string | null; className?: string }) {
   const IconComponent = icon ? ICON_MAP[icon] : null
   return (
     <div className={cn('w-10 h-10 rounded-lg flex items-center justify-center', getCategoryColorClass(color), className)}>
