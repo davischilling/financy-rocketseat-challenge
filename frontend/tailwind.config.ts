@@ -7,6 +7,7 @@ export default {
         'brand-base': '#1F6F43',
         'brand-dark': '#124B2B',
         'danger': '#EF4444',
+        'red-dark': '#B91C1C'
       },
     },
   },
